@@ -1,6 +1,14 @@
-// backend/controllers/userController.js
-const User = require('../models/User');  // Make sure this import is correct
+const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+// Function to generate JWT token
+const generateToken = (userId) => {
+  const secret = 'ajfsdnaljgsnlakjsdfnaljkgsb'; // Change this to a strong, unique secret
+  const expiresIn = '1h'; // Token expiration time
+
+  return jwt.sign({ userId }, secret, { expiresIn });
+};
 
 exports.registerUser = async (req, res) => {
   try {
@@ -17,7 +25,10 @@ exports.registerUser = async (req, res) => {
     });
 
     await newUser.save();
-    res.status(201).json({ message: 'User registered successfully.' });
+
+    // Generate a token and send it in the response
+    const token = generateToken(newUser._id);
+    res.status(201).json({ message: 'User registered successfully.', token });
   } catch (error) {
     console.error(error);
 
@@ -46,8 +57,9 @@ exports.loginUser = async (req, res) => {
       return res.status(401).json({ error: 'Invalid password.' });
     }
 
-    // Redirect to Call Record Management page on successful login
-    res.status(200).json({ message: 'Login successful.', redirectTo: '/call-record-management' });
+    // Generate a token and send it in the response
+    const token = generateToken(user._id);
+    res.status(200).json({ message: 'Login successful.', token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

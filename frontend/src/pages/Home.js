@@ -1,10 +1,21 @@
 // src/pages/Home.js
 import React from 'react';
-import { AppBar, Container, CssBaseline, Link, Toolbar, Typography } from '@mui/material';
+import { AppBar, Container, CssBaseline, Toolbar, Typography, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  // Placeholder for authentication status. Replace it with your actual authentication logic.
-  const isAuthenticated = true; // Replace with your authentication logic
+  const navigate = useNavigate();
+
+  // Check if there's a valid token in localStorage
+  const isAuthenticated = !!localStorage.getItem('token');
+
+  const handleLogout = () => {
+    // Clear the token from localStorage
+    localStorage.removeItem('token');
+    
+    // Refresh the home page
+    window.location.reload();
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -16,21 +27,24 @@ const Home = () => {
           </Typography>
           {isAuthenticated ? (
             <div>
-              <Link href="/call-record-management" color="inherit" sx={{ marginRight: 2 }}>
+              <Button color="inherit" onClick={() => navigate('/call-record-management')} sx={{ marginRight: 2 }}>
                 Call Record Management
-              </Link>
-              <Link href="/logout" color="inherit">
+              </Button>
+              <Button color="inherit" onClick={() => navigate('/appointments')} sx={{ marginRight: 2 }}>
+                Appointments
+              </Button>
+              <Button color="inherit" onClick={handleLogout}>
                 Logout
-              </Link>
+              </Button>
             </div>
           ) : (
             <div>
-              <Link href="/login" color="inherit" sx={{ marginRight: 2 }}>
+              <Button color="inherit" onClick={() => navigate('/login')} sx={{ marginRight: 2 }}>
                 Login
-              </Link>
-              <Link href="/register" color="inherit">
+              </Button>
+              <Button color="inherit" onClick={() => navigate('/register')} sx={{ marginRight: 2 }}>
                 Register
-              </Link>
+              </Button>
             </div>
           )}
         </Toolbar>
@@ -49,9 +63,9 @@ const Home = () => {
         </Typography>
       </Container>
 
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="default" sx={{ marginTop: 'auto' }}>
         <Toolbar>
-          <Typography variant="body2" color="inherit" sx={{ flexGrow: 1 }}>
+          <Typography variant="body2" color="inherit" sx={{ margin: 'auto' }}>
             © 2024 Custom App. All rights reserved.
           </Typography>
         </Toolbar>

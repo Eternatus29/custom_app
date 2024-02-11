@@ -1,8 +1,11 @@
 // src/pages/Register.js
 import React, { useState } from 'react';
 import { Button, Container, CssBaseline, Grid, TextField, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const Register = () => {
+  const navigate = useNavigate(); // Initialize the useNavigate hook
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -11,19 +14,9 @@ const Register = () => {
     confirmPassword: '',
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  const [registerError, setRegisterError] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Add validation logic if needed
-
+  const handleRegister = async () => {
     try {
       const response = await fetch('http://localhost:5000/users/register', {
         method: 'POST',
@@ -34,16 +27,31 @@ const Register = () => {
       });
 
       if (response.ok) {
-        console.log('User registered successfully.');
-        // Redirect to login or handle success as needed
+        const result = await response.json();
+        console.log('User registered successfully:', result);
+
+        // Save the token to localStorage or a secure cookie
+        localStorage.setItem('token', result.token);
+
+        // Redirect to the home page
+        navigate('/'); // Use the navigate function to go to the home page
       } else {
-        console.error('Failed to register user.');
-        // Handle error, show error message, etc.
+        const errorResult = await response.json();
+        console.error('Failed to register:', errorResult);
+        setRegisterError(errorResult.error || 'Registration failed.'); // Set an error message
       }
     } catch (error) {
       console.error('Error during registration:', error);
-      // Handle error, show error message, etc.
+      setRegisterError('Internal Server Error. Please try again.'); // Set an error message
     }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   return (
@@ -53,7 +61,17 @@ const Register = () => {
         <Typography variant="h5" align="center" gutterBottom>
           Register
         </Typography>
-        <form onSubmit={handleSubmit}>
+        {registerError && (
+          <Typography variant="body2" color="error" align="center">
+            {registerError}
+          </Typography>
+        )}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleRegister();
+          }}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField

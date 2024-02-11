@@ -20,9 +20,7 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleLogin = async () => {
     try {
       const response = await fetch('http://localhost:5000/users/login', {
         method: 'POST',
@@ -33,13 +31,18 @@ const Login = () => {
       });
 
       if (response.ok) {
-        console.log('Login successful.');
-        setLoginError('');
-        // Redirect to the Call Record Management page
-        navigate('/call-record-management');
+        const result = await response.json();
+        console.log('Login successful:', result);
+
+        // Save the token to localStorage or a secure cookie
+        localStorage.setItem('token', result.token);
+
+        // Redirect to a protected route or handle success as needed
+        navigate('/');
       } else {
-        console.error('Failed to login.');
-        setLoginError('Invalid email or password.'); // Set an error message
+        const errorResult = await response.json();
+        console.error('Failed to login:', errorResult);
+        setLoginError(errorResult.error || 'Login failed.'); // Set an error message
       }
     } catch (error) {
       console.error('Error during login:', error);
@@ -59,7 +62,12 @@ const Login = () => {
             {loginError}
           </Typography>
         )}
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin();
+          }}
+        >
           <TextField
             margin="normal"
             fullWidth
