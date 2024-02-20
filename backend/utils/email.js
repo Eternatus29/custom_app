@@ -78,7 +78,7 @@ module.exports = class Email {
       <body>
         <div class="container">
           <div class="header">
-            Hello!
+            Custom App!
           </div>
           <div class="content">
             <p class="bold">${this.message}</p>
