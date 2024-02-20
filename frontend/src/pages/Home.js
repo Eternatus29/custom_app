@@ -1,96 +1,5 @@
-// // src/pages/Home.js
-// import React from 'react';
-// import { AppBar, Container, CssBaseline, Toolbar, Typography, Button, Drawer, List, ListItem, ListItemText } from '@mui/material';
-// import { useNavigate } from 'react-router-dom';
-
-// const Home = () => {
-//   const navigate = useNavigate();
-
-//   // Check if there's a valid token in localStorage
-//   const isAuthenticated = !!localStorage.getItem('token');
-
-//   const handleLogout = () => {
-//     // Clear the token from localStorage
-//     localStorage.removeItem('token');
-    
-//     // Refresh the home page
-//     window.location.reload();
-//   };
-
-//   return (
-//     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-//       <CssBaseline />
-//       <AppBar position="static">
-//         <Toolbar>
-//           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-//             Custom App
-//           </Typography>
-//           {isAuthenticated ? (
-//             <div>
-//               <Button color="inherit" onClick={() => navigate('/call-record-management')} sx={{ marginRight: 2 }}>
-//                 Call Record Management
-//               </Button>
-//               <Button color="inherit" onClick={() => navigate('/appointments')} sx={{ marginRight: 2 }}>
-//                 Appointments
-//               </Button>
-//               <Button color="inherit" onClick={() => navigate('/contact')} sx={{ marginRight: 2 }}>
-//                 Contact
-//               </Button>
-//               <Button color="inherit" onClick={handleLogout}>
-//                 Logout
-//               </Button>
-//             </div>
-//           ) : (
-//             <div>
-//               <Button color="inherit" onClick={() => navigate('/login')} sx={{ marginRight: 2 }}>
-//                 Login
-//               </Button>
-//               <Button color="inherit" onClick={() => navigate('/register')} sx={{ marginRight: 2 }}>
-//                 Register
-//               </Button>
-//             </div>
-//           )}
-//         </Toolbar>
-//       </AppBar>
-
-//       <Container
-//         component="main"
-//         maxWidth="md"
-//         sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
-//       >
-//         <Typography variant="h2" gutterBottom>
-//           Welcome to Custom App
-//         </Typography>
-//         <Typography variant="body1" paragraph>
-//           This is the homepage.
-//         </Typography>
-//       </Container>
-
-//       <AppBar position="static" color="default" sx={{ marginTop: 'auto' }}>
-//         <Toolbar>
-//           <Typography variant="body2" color="inherit" sx={{ margin: 'auto' }}>
-//             © 2024 Custom App. All rights reserved.
-//           </Typography>
-//         </Toolbar>
-//       </AppBar>
-//     </div>
-//   );
-// };
-
-// export default Home;
-
-// src/pages/HomePage.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from 'react-router-dom';
 
 function HomePage() {
@@ -99,87 +8,54 @@ function HomePage() {
   
   const handleSignOut = () => {
     localStorage.removeItem('token');
-    window.location.reload();
+    navigate('/login'); // Redirect to login after sign out for immediate feedback
   };
 
-  const drawerWidth = 240;
-
-  const drawer = (
-    <div>
-      <Toolbar />
-      <List>
-        {isLoggedIn ? (
-          <>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/call-record-management">
-                <ListItemText primary="Call Records" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/appointments">
-                <ListItemText primary="Appointments" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/contact">
-                <ListItemText primary="Send Mail" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton onClick={handleSignOut}>
-                <ListItemText primary="Sign Out" />
-              </ListItemButton>
-            </ListItem>
-          </>
-        ) : (
-          <>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/register">
-                <ListItemText primary="Sign Up" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/login">
-                <ListItemText primary="Sign In" />
-              </ListItemButton>
-            </ListItem>
-          </>
-        )}
-      </List>
-    </div>
-  );
+  const navigationLinks = isLoggedIn ? [
+    { name: 'Call Records', path: '/call-record-management' },
+    { name: 'Appointments', path: '/appointments' },
+    { name: 'Send Mail', path: '/contact' },
+    { name: 'Sign Out', action: handleSignOut },
+  ] : [
+    { name: 'Sign Up', path: '/register' },
+    { name: 'Sign In', path: '/login' },
+  ];
 
   return (
-    <div style={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap component="div">
-            Custom App
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-        }}
-      >
-        {drawer}
-      </Drawer>
-      <main style={{ flexGrow: 1, padding: 3, marginTop: '64px' }}>
-        <Typography paragraph>
-          Welcome to the home page!
-        </Typography>
-        <Typography>
-          Content will be added as per requirements.
-        </Typography>
+    <div className="flex flex-col h-screen text-white bg-dark-blue">
+      {/* Sidebar */}
+      <div className="w-60 h-full shadow-md bg-white/30 backdrop-blur-lg px-1 fixed">
+        <ul className="relative">
+          {navigationLinks.map((link, index) => (
+            <li key={index} className="relative">
+              {link.path ? (
+                <Link to={link.path} className="flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-white hover:bg-white/10 text-ellipsis whitespace-nowrap rounded">
+                  {link.name}
+                </Link>
+              ) : (
+                <button onClick={link.action} className="flex items-center text-sm py-4 px-6 h-12 w-full text-left text-white hover:bg-white/10">
+                  {link.name}
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Main Content */}
+      <main className="flex-grow flex items-center justify-center p-3">
+        <div className="mt-12 text-center">
+          <h1 className="text-2xl font-bold">Welcome to the home page!</h1>
+          <p className="mt-4">
+            Content will be added as per requirements.
+          </p>
+        </div>
       </main>
+
+      {/* Footer */}
+      <footer className="p-4 bg-dark-blue/80 text-white text-center">
+        &copy; Custom App 2024
+      </footer>
     </div>
   );
 }

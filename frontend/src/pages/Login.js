@@ -1,7 +1,5 @@
-// src/pages/Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Container, CssBaseline, TextField, Typography } from '@mui/material';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -51,16 +49,11 @@ const Login = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div>
-        <Typography variant="h5" align="center" gutterBottom>
-          Login
-        </Typography>
+    <div className="flex items-center justify-center min-h-screen bg-dark-blue font-sans">
+      <div className="px-10 py-8 text-left bg-form-bg shadow-lg rounded-lg max-w-2xl w-full">
+        <h3 className="text-2xl font-bold text-center text-white">Login</h3>
         {loginError && (
-          <Typography variant="body2" color="error" align="center">
-            {loginError}
-          </Typography>
+          <p className="text-xs text-center text-red-500">{loginError}</p>
         )}
         <form
           onSubmit={(e) => {
@@ -68,40 +61,44 @@ const Login = () => {
             handleLogin();
           }}
         >
-          <TextField
-            margin="normal"
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={formData.email}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="normal"
-            fullWidth
-            id="password"
-            label="Password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            sx={{ mt: 3 }}
-          >
-            Login
-          </Button>
+          <div className="mt-4">
+            <div>
+              <label className="block text-white" htmlFor="email">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-4 py-2 mt-2 border rounded-md bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                autoComplete="email"
+                autoFocus
+              />
+            </div>
+            <div className="mt-4">
+              <label className="block text-white" htmlFor="password">Password</label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full px-4 py-2 mt-2 border rounded-md bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                autoComplete="current-password"
+              />
+            </div>
+            <div className="flex items-baseline justify-between">
+              <button
+                type="submit"
+                className="px-6 py-2 mt-4 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+              >
+                Login
+              </button>
+            </div>
+          </div>
         </form>
       </div>
-    </Container>
+    </div>
   );
 };
 
