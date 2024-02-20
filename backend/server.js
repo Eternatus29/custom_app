@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost:27017/mern_app');
+mongoose.connect('mongodb://localhost:27017/custom_app');
 
 const connection = mongoose.connection;
 

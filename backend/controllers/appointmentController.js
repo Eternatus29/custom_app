@@ -28,3 +28,17 @@ exports.getAppointments = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+exports.restrictTo = (...roles) => {
+    
+  return (req , res , next) => {
+
+      if (!roles.includes(req.user.role)) {
+
+        return res.status(403).send('You donot have permission to perform this action');
+
+      }
+
+      next();
+    }
+}
