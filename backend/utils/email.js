@@ -12,8 +12,8 @@ module.exports = class Email {
 			host: "smtp-relay.sendinblue.com",
 			port: 587,
 			auth: {
-				user: "yos8760@gmail.com", //fill email
-				pass: "jOx4wQD3bMGp72aA", //fill password
+				user: "enter-email", //fill email
+				pass: "enter-password", //fill password
 			},
 		});
 	}
@@ -22,7 +22,7 @@ module.exports = class Email {
 		const mailOptions = {
 			from: this.from,
 			to: this.to,
-			subject: "Hello!",
+			subject: "Custom Application",
 			text: `This message is sent using Custom App.`,
 			html: `<!DOCTYPE html>
       <!DOCTYPE html>
